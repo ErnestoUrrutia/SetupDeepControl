@@ -1,0 +1,10 @@
+{
+  "version": 2,
+  "dgSpecHash": "TvPaqhcZHbM=",
+  "success": true,
+  "projectFilePath": "C:\\SetupDeepControl\\SetupDeepControl\\SetupDeepControl.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\ernes\\.nuget\\packages\\microsoft.net.illink.tasks\\8.0.5\\microsoft.net.illink.tasks.8.0.5.nupkg.sha512"
+  ],
+  "logs": []
+}

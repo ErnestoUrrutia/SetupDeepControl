@@ -14,3 +14,5 @@ C:\SetupDeepControl\SetupDeepControl\obj\Debug\net8.0-windows\refint\SetupDeepCo
 C:\SetupDeepControl\SetupDeepControl\obj\Debug\net8.0-windows\SetupDeepControl.pdb
 C:\SetupDeepControl\SetupDeepControl\obj\Debug\net8.0-windows\SetupDeepControl.genruntimeconfig.cache
 C:\SetupDeepControl\SetupDeepControl\obj\Debug\net8.0-windows\ref\SetupDeepControl.dll
+C:\SetupDeepControl\SetupDeepControl\obj\Debug\net8.0-windows\SetupDeepControl.sourcelink.json
+C:\SetupDeepControl\SetupDeepControl\obj\Debug\net8.0-windows\SetupDeepControl.Properties.Resources.resources

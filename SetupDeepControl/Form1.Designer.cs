@@ -28,46 +28,63 @@
         /// </summary>
         private void InitializeComponent()
         {
-            textBoxLog = new TextBox();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
             button1 = new Button();
+            pictureBox1 = new PictureBox();
+            richTextBox1 = new RichTextBox();
+            ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
             SuspendLayout();
-            // 
-            // textBoxLog
-            // 
-            textBoxLog.Location = new Point(259, 12);
-            textBoxLog.Multiline = true;
-            textBoxLog.Name = "textBoxLog";
-            textBoxLog.ReadOnly = true;
-            textBoxLog.Size = new Size(313, 297);
-            textBoxLog.TabIndex = 0;
             // 
             // button1
             // 
-            button1.BackColor = Color.Lime;
-            button1.Location = new Point(12, 286);
+            button1.BackColor = SystemColors.MenuHighlight;
+            button1.Image = (Image)resources.GetObject("button1.Image");
+            button1.Location = new Point(12, 353);
             button1.Name = "button1";
-            button1.Size = new Size(229, 23);
+            button1.Size = new Size(220, 36);
             button1.TabIndex = 1;
-            button1.Text = "INSTALAR";
             button1.UseVisualStyleBackColor = false;
             button1.Click += button1_Click;
+            // 
+            // pictureBox1
+            // 
+            pictureBox1.Image = (Image)resources.GetObject("pictureBox1.Image");
+            pictureBox1.Location = new Point(0, 0);
+            pictureBox1.Name = "pictureBox1";
+            pictureBox1.Size = new Size(893, 403);
+            pictureBox1.SizeMode = PictureBoxSizeMode.Zoom;
+            pictureBox1.TabIndex = 2;
+            pictureBox1.TabStop = false;
+            // 
+            // richTextBox1
+            // 
+            richTextBox1.BackColor = SystemColors.ButtonFace;
+            richTextBox1.Location = new Point(487, 76);
+            richTextBox1.Name = "richTextBox1";
+            richTextBox1.ReadOnly = true;
+            richTextBox1.ScrollBars = RichTextBoxScrollBars.Vertical;
+            richTextBox1.Size = new Size(376, 283);
+            richTextBox1.TabIndex = 3;
+            richTextBox1.Text = "";
             // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(584, 321);
+            ClientSize = new Size(892, 402);
+            Controls.Add(richTextBox1);
             Controls.Add(button1);
-            Controls.Add(textBoxLog);
+            Controls.Add(pictureBox1);
+            Icon = (Icon)resources.GetObject("$this.Icon");
             Name = "Form1";
-            Text = "Form1";
+            Text = "Instalador DeepControl";
+            ((System.ComponentModel.ISupportInitialize)pictureBox1).EndInit();
             ResumeLayout(false);
-            PerformLayout();
         }
 
         #endregion
-
-        private TextBox textBoxLog;
         private Button button1;
+        private PictureBox pictureBox1;
+        private RichTextBox richTextBox1;
     }
 }
