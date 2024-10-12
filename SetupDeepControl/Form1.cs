@@ -2,7 +2,9 @@ using Microsoft.Win32;
 using System;
 using System.Diagnostics;
 using System.IO;
+using System.Text;
 using System.Windows.Forms;
+using System.Xml;
 using static System.Net.Mime.MediaTypeNames;
 namespace SetupDeepControl
 {
@@ -13,7 +15,18 @@ namespace SetupDeepControl
         {
             InitializeComponent();
             this.MaximizeBox = false; // Desactiva el botón de maximizar
-            
+            string ip = "192.168.1.1";
+            string port = "8080";
+
+            // Codificar en Base64
+            string encodedIp = Convert.ToBase64String(Encoding.UTF8.GetBytes(ip));
+            string encodedPort = Convert.ToBase64String(Encoding.UTF8.GetBytes(port));
+
+            // Guardar en archivo .ini
+            File.WriteAllText("config.ini", $"ip={encodedIp}\nport={encodedPort}");
+
+
+
         }
         public void LogMessage(string message)
         {
