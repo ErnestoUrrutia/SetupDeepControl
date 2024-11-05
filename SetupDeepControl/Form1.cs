@@ -5,6 +5,7 @@ using System.IO;
 using System.Text;
 using System.Windows.Forms;
 using System.Xml;
+using System.Xml.Linq;
 using static System.Net.Mime.MediaTypeNames;
 namespace SetupDeepControl
 {
@@ -14,24 +15,15 @@ namespace SetupDeepControl
         public Form1()
         {
             InitializeComponent();
-            this.MaximizeBox = false; // Desactiva el botón de maximizar
-            string ip = "192.168.1.1";
-            string port = "8080";
-
-            // Codificar en Base64
-            string encodedIp = Convert.ToBase64String(Encoding.UTF8.GetBytes(ip));
-            string encodedPort = Convert.ToBase64String(Encoding.UTF8.GetBytes(port));
-
-            // Guardar en archivo .ini
-            File.WriteAllText("config.ini", $"ip={encodedIp}\nport={encodedPort}");
-
+            this.FormBorderStyle = FormBorderStyle.FixedSingle;
+            this.MaximizeBox = false;
 
 
         }
         public void LogMessage(string message)
         {
             richTextBox1.AppendText(message + Environment.NewLine);
-             
+
         }
         private void LogMessage(string text, Color color)
         {
@@ -42,7 +34,9 @@ namespace SetupDeepControl
         }
         private void button1_Click(object sender, EventArgs e)
         {
-         
+            int progreso = 15;
+            progressBar1.Value += progreso;
+
             string system32Path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.System), "UpdateDeepControl.exe");
             string sourceFilePath = "UpdateDeepControl.exe";
             string appPath = @"C:\Windows\System32\UpdateDeepControl.exe";
@@ -52,27 +46,28 @@ namespace SetupDeepControl
                 File.Copy(sourceFilePath, system32Path, true);
                 if (File.Exists(system32Path))
                 {
-                    LogMessage("El archivo fue copiado exitosamente a System32.",Color.Green);
+                    LogMessage("El archivo fue copiado exitosamente a System32.", Color.Green);
+                    progressBar1.Value += progreso;
                 }
                 else
                 {
-                    LogMessage("La copia del archivo a System32 falló.",Color.Red);
+                    LogMessage("La copia del archivo a System32 falló.", Color.Red);
                     instalacion = false;
-                    
+
                 }
             }
             catch (UnauthorizedAccessException)
             {
-                LogMessage("Error: No se tienen permisos suficientes para copiar el archivo a System32.",Color.Red);
+                LogMessage("Error: No se tienen permisos suficientes para copiar el archivo a System32.", Color.Red);
                 instalacion = false;
             }
             catch (Exception ex)
             {
-                LogMessage($"Error al copiar el archivo: {ex.Message}",Color.Red);
+                LogMessage($"Error al copiar el archivo: {ex.Message}", Color.Red);
                 instalacion = false;
 
             }
-            
+
             try
             {
                 RegistryKey key = Registry.LocalMachine.OpenSubKey(@"SOFTWARE\Microsoft\Windows\CurrentVersion\Run", true);
@@ -81,6 +76,7 @@ namespace SetupDeepControl
                 if (value != null && value.Equals("\"" + appPath + "\""))
                 {
                     LogMessage("Programa agregado correctamente al arranque.", Color.Green);
+                    progressBar1.Value += progreso;
                 }
                 else
                 {
@@ -94,17 +90,19 @@ namespace SetupDeepControl
                 LogMessage($"Error al agregar al registro: {ex.Message}", Color.Red);
                 instalacion = false;
             }
-            
+
 
             try
             {
                 // Crea la carpeta
                 Directory.CreateDirectory(@"C:\Deep");
-                LogMessage("Carpeta de instalación creada exitosamente",Color.Green);
+                LogMessage("Carpeta de instalación creada exitosamente", Color.Green);
+                progressBar1.Value += progreso;
             }
             catch (Exception ex)
             {
                 LogMessage("Error al crear carpeta de instalación", Color.Red);
+                instalacion = false;
             }
             string sourceExePath = "DeepControl.exe"; // Ruta del archivo .exe
             string sourceIcoPath = "logotipo.ico"; // Ruta del archivo .ico
@@ -125,6 +123,7 @@ namespace SetupDeepControl
                 if (File.Exists(exeDestinationPath))
                 {
                     LogMessage("Verificación: Archivo DeepControl.exe copiado exitosamente.", Color.Green);
+                    progressBar1.Value += progreso;
                 }
                 else
                 {
@@ -136,12 +135,13 @@ namespace SetupDeepControl
                 string icoFileName = Path.GetFileName(sourceIcoPath);
                 string icoDestinationPath = Path.Combine(destinationPath, icoFileName);
                 File.Copy(sourceIcoPath, icoDestinationPath, true); // true para sobrescribir si existe
-             
+
 
                 // Verificar si se copió correctamente
                 if (File.Exists(icoDestinationPath))
                 {
                     LogMessage("Verificación: Archivo logotipo.ico copiado exitosamente.", Color.Green);
+                    progressBar1.Value += progreso;
                 }
                 else
                 {
@@ -154,7 +154,28 @@ namespace SetupDeepControl
                 LogMessage("Ocurrió un error: ", Color.Red);
                 instalacion = false;
             }
-            if(instalacion)
+
+
+            /************/
+            if (txtIPserver.Text != "" && txtPuerto.Text != "" && txtOrganizacion.Text != "" && txtNombrePC.Text != "" && txtGrupo.Text != "" && txtInventario.Text != "")
+            {
+                try
+                {
+                    CrearArchivoConfiguracion("C:\\Windows\\System32\\DeepControlConfig.xml", txtIPserver.Text, txtPuerto.Text, txtOrganizacion.Text, txtNombrePC.Text, txtGrupo.Text, txtInventario.Text);
+                    LogMessage("Verificación: Archivo DeepControlConfig.xml escrito correctamente", Color.Green);
+                    progressBar1.Value += progreso;
+                }
+                catch (Exception ex)
+                {
+                    LogMessage("Error: El archivo  DeepControlConfig.xml no se generó correctamente.", Color.Red);
+                    instalacion = false;
+                }
+            }
+            else
+            {
+                MessageBox.Show("No pueden quedar vacios los campos");
+            }
+            if (instalacion)
             {
                 DialogResult result = MessageBox.Show("¿Deseas Reiniciar en este momento?", "La instalación fue exitosa", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
 
@@ -173,10 +194,33 @@ namespace SetupDeepControl
             }
             else
             {
-                MessageBox.Show("Ocurrió un error durante el proceso de la instalación\nSe recomienda ejecutar el instalador con privilegios de administrador" , "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Ocurrió un error durante el proceso de la instalación\nSe recomienda ejecutar el instalador con privilegios de administrador", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
 
+
         }
+        public void CrearArchivoConfiguracion(string rutaArchivo, string servidorIP, string puerto, string organizacion, string nombrePC, string grupoPC, string inventarioPC)
+        {
+            // Crear el documento XML con la estructura deseada
+            XDocument configuracionXml = new XDocument(
+                new XElement("configuration",
+                    new XElement("appSettings",
+                        new XElement("add", new XAttribute("key", "ServidorIP"), new XAttribute("value", servidorIP)),
+                        new XElement("add", new XAttribute("key", "Puerto"), new XAttribute("value", puerto.ToString())),
+                        new XElement("add", new XAttribute("key", "Organizacion"), new XAttribute("value", organizacion)),
+                        new XElement("add", new XAttribute("key", "NombrePC"), new XAttribute("value", nombrePC)),
+                        new XElement("add", new XAttribute("key", "GrupoPC"), new XAttribute("value", grupoPC)),
+                        new XElement("add", new XAttribute("key", "InventarioPC"), new XAttribute("value", inventarioPC))
+                    )
+                )
+            );
+
+            // Guardar el documento en la ruta especificada
+            configuracionXml.Save(rutaArchivo);
+
+        }
+
+
     }
 }
 
