@@ -2,6 +2,7 @@ using Microsoft.Win32;
 using System;
 using System.Diagnostics;
 using System.IO;
+using System.Reflection;
 using System.Text;
 using System.Windows.Forms;
 using System.Xml;
@@ -9,14 +10,24 @@ using System.Xml.Linq;
 using static System.Net.Mime.MediaTypeNames;
 namespace SetupDeepControl
 {
-    public partial class Form1 : Form
+    public partial class SetupForm : Form
     {
         bool instalacion = true;
-        public Form1()
+        public SetupForm()
         {
             InitializeComponent();
             this.FormBorderStyle = FormBorderStyle.FixedSingle;
             this.MaximizeBox = false;
+            ToolTip toolTip1 = new ToolTip();
+
+            toolTip1.SetToolTip(infoOrganizacion, "En este campo se coloca el nombre de la organización que controla las salas de computo o estaciones\r\nEjemplo: \"Departamento de Sistemas\"");
+            toolTip1.SetToolTip(infoServer, "En este campo se coloca la direccion IP donde se encuentra corriendo el servidor DeepControl\r\nEjemplo: 192.168.1.200\"");
+            toolTip1.SetToolTip(infoPuerto, "En este campo se coloca el puerto de trabajo entre servidor y semilla\r\nSe recomienda usar el default: 47373");
+            toolTip1.SetToolTip(infoPC, "En este campo se coloca el nombre de la maquina o estación en la cual se esta instalando, de esta forma será visualizada en el servidor\r\nEjemplo: \"PC10\"");
+            toolTip1.SetToolTip(infoGrupo, "En este campo se coloca el nombre de la sala o grupo de trabajo, de esta forma será agrupado con las estaciones de su misma area \r\nEjemplo: \"SALA01\"");
+            toolTip1.SetToolTip(infoInventario, "En este campo se coloca el número de inventario(de ser necesario), con la finalidad de llevar un control más especifico del equipo o estación \r\nEjemplo: \"INV0102\" \r\nEn caso de no ser requerido colocar \"N/A\"");
+            toolTip1.SetToolTip(btnDesinstalar, "Desinstalar");
+
 
 
         }
@@ -220,7 +231,38 @@ namespace SetupDeepControl
 
         }
 
+        private void toolTip1_Popup(object sender, PopupEventArgs e)
+        {
 
+        }
+
+        private void Form1_Load(object sender, EventArgs e)
+        {
+
+        }
+
+        private void btnDesinstalar_Click(object sender, EventArgs e)
+        {
+            string rutaEscritorio = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), "DeepControl.exe");
+            using (Stream stream = Assembly.GetExecutingAssembly().GetManifestResourceStream("SetupDeepControl.DeepControl.exe"))
+            {
+                if (stream != null)
+                {
+                    using (FileStream fileStream = new FileStream(rutaEscritorio, FileMode.Create, FileAccess.Write))
+                    {
+                        stream.CopyTo(fileStream);
+                    }
+                }
+                else
+                {
+                    MessageBox.Show("No");
+                }
+            }
+
+            // Opcional: ejecutar el .exe en el escritorio si lo necesitas
+            //System.Diagnostics.Process.Start(rutaEscritorio);
+
+        }
     }
 }
 

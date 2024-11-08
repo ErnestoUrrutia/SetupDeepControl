@@ -10,7 +10,15 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="DeepControl.exe" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Content Include="logotipo.ico" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="DeepControl.exe" />
   </ItemGroup>
 
   <ItemGroup>
