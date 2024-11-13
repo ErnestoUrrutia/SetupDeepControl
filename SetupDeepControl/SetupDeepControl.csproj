@@ -7,10 +7,14 @@
     <UseWindowsForms>true</UseWindowsForms>
     <ImplicitUsings>enable</ImplicitUsings>
     <ApplicationIcon>logotipo.ico</ApplicationIcon>
+    <Company>Ernesto Urrutia Developer</Company>
+    <Product>DeepControl</Product>
   </PropertyGroup>
 
   <ItemGroup>
     <None Remove="DeepControl.exe" />
+    <None Remove="DeepObserver.exe" />
+    <None Remove="UpdateDeepControl.exe" />
   </ItemGroup>
 
   <ItemGroup>
@@ -19,6 +23,12 @@
 
   <ItemGroup>
     <EmbeddedResource Include="DeepControl.exe" />
+    <EmbeddedResource Include="DeepObserver.exe" />
+    <EmbeddedResource Include="UpdateDeepControl.exe" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="TaskScheduler" Version="2.11.0" />
   </ItemGroup>
 
   <ItemGroup>

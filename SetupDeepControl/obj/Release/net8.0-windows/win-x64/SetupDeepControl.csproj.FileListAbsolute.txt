@@ -3,7 +3,6 @@ C:\SetupDeepControl\SetupDeepControl\bin\Release\net8.0-windows\win-x64\SetupDee
 C:\SetupDeepControl\SetupDeepControl\bin\Release\net8.0-windows\win-x64\SetupDeepControl.runtimeconfig.json
 C:\SetupDeepControl\SetupDeepControl\bin\Release\net8.0-windows\win-x64\SetupDeepControl.dll
 C:\SetupDeepControl\SetupDeepControl\bin\Release\net8.0-windows\win-x64\SetupDeepControl.pdb
-C:\SetupDeepControl\SetupDeepControl\obj\Release\net8.0-windows\win-x64\SetupDeepControl.Form1.resources
 C:\SetupDeepControl\SetupDeepControl\obj\Release\net8.0-windows\win-x64\SetupDeepControl.Properties.Resources.resources
 C:\SetupDeepControl\SetupDeepControl\obj\Release\net8.0-windows\win-x64\SetupDeepControl.csproj.GenerateResource.cache
 C:\SetupDeepControl\SetupDeepControl\obj\Release\net8.0-windows\win-x64\SetupDeepControl.GeneratedMSBuildEditorConfig.editorconfig
@@ -16,3 +15,18 @@ C:\SetupDeepControl\SetupDeepControl\obj\Release\net8.0-windows\win-x64\refint\S
 C:\SetupDeepControl\SetupDeepControl\obj\Release\net8.0-windows\win-x64\SetupDeepControl.pdb
 C:\SetupDeepControl\SetupDeepControl\obj\Release\net8.0-windows\win-x64\SetupDeepControl.genruntimeconfig.cache
 C:\SetupDeepControl\SetupDeepControl\obj\Release\net8.0-windows\win-x64\ref\SetupDeepControl.dll
+C:\SetupDeepControl\SetupDeepControl\bin\Release\net8.0-windows\win-x64\Microsoft.Win32.TaskScheduler.dll
+C:\SetupDeepControl\SetupDeepControl\bin\Release\net8.0-windows\win-x64\de\Microsoft.Win32.TaskScheduler.resources.dll
+C:\SetupDeepControl\SetupDeepControl\bin\Release\net8.0-windows\win-x64\es\Microsoft.Win32.TaskScheduler.resources.dll
+C:\SetupDeepControl\SetupDeepControl\bin\Release\net8.0-windows\win-x64\fr\Microsoft.Win32.TaskScheduler.resources.dll
+C:\SetupDeepControl\SetupDeepControl\bin\Release\net8.0-windows\win-x64\it\Microsoft.Win32.TaskScheduler.resources.dll
+C:\SetupDeepControl\SetupDeepControl\bin\Release\net8.0-windows\win-x64\ja\Microsoft.Win32.TaskScheduler.resources.dll
+C:\SetupDeepControl\SetupDeepControl\bin\Release\net8.0-windows\win-x64\pl\Microsoft.Win32.TaskScheduler.resources.dll
+C:\SetupDeepControl\SetupDeepControl\bin\Release\net8.0-windows\win-x64\ru\Microsoft.Win32.TaskScheduler.resources.dll
+C:\SetupDeepControl\SetupDeepControl\bin\Release\net8.0-windows\win-x64\sv\Microsoft.Win32.TaskScheduler.resources.dll
+C:\SetupDeepControl\SetupDeepControl\bin\Release\net8.0-windows\win-x64\tr\Microsoft.Win32.TaskScheduler.resources.dll
+C:\SetupDeepControl\SetupDeepControl\bin\Release\net8.0-windows\win-x64\zh-CN\Microsoft.Win32.TaskScheduler.resources.dll
+C:\SetupDeepControl\SetupDeepControl\bin\Release\net8.0-windows\win-x64\zh-Hant\Microsoft.Win32.TaskScheduler.resources.dll
+C:\SetupDeepControl\SetupDeepControl\obj\Release\net8.0-windows\win-x64\SetupDeepControl.csproj.AssemblyReference.cache
+C:\SetupDeepControl\SetupDeepControl\obj\Release\net8.0-windows\win-x64\SetupDeepControl.SetupForm.resources
+C:\SetupDeepControl\SetupDeepControl\obj\Release\net8.0-windows\win-x64\SetupDee.DE9A1FCC.Up2Date

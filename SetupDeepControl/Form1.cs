@@ -8,6 +8,8 @@ using System.Windows.Forms;
 using System.Xml;
 using System.Xml.Linq;
 using static System.Net.Mime.MediaTypeNames;
+
+using Microsoft.Win32.TaskScheduler;
 namespace SetupDeepControl
 {
     public partial class SetupForm : Form
@@ -27,9 +29,32 @@ namespace SetupDeepControl
             toolTip1.SetToolTip(infoGrupo, "En este campo se coloca el nombre de la sala o grupo de trabajo, de esta forma será agrupado con las estaciones de su misma area \r\nEjemplo: \"SALA01\"");
             toolTip1.SetToolTip(infoInventario, "En este campo se coloca el número de inventario(de ser necesario), con la finalidad de llevar un control más especifico del equipo o estación \r\nEjemplo: \"INV0102\" \r\nEn caso de no ser requerido colocar \"N/A\"");
             toolTip1.SetToolTip(btnDesinstalar, "Desinstalar");
+        }
+        public bool CrearTarea()
+        {
+            try
+            {
+                using (var ts = new TaskService())
+                {
+                    var task = ts.NewTask();
+                    task.RegistrationInfo.Description = "DeepObserver visor de DeepControl";
+                    task.Principal.UserId = "SYSTEM";
+                    task.Principal.LogonType = TaskLogonType.ServiceAccount;
+                    var trigger = new BootTrigger();
+                    task.Triggers.Add(trigger);
+                    var exec = new ExecAction(@"C:\Windows\System32\DeepObserver.exe", null, null);
+                    task.Actions.Add(exec);
+                    const string taskName = "DeepObserver";
+                    ts.RootFolder.RegisterTaskDefinition(taskName, task);
+                    var registeredTask = ts.GetTask(taskName);
+                    return registeredTask != null;
+                }
+            }
+            catch (Exception ex)
+            {
 
-
-
+                return false;
+            }
         }
         public void LogMessage(string message)
         {
@@ -45,26 +70,34 @@ namespace SetupDeepControl
         }
         private void button1_Click(object sender, EventArgs e)
         {
-            int progreso = 15;
+            Process.Start("taskkill", $"/f /im DeepObserver.exe");
+            Process.Start("taskkill", $"/f /im DeepControl.exe");
+            Thread.Sleep(2000);
+            int progreso = 14;
             progressBar1.Value += progreso;
 
-            string system32Path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.System), "UpdateDeepControl.exe");
-            string sourceFilePath = "UpdateDeepControl.exe";
-            string appPath = @"C:\Windows\System32\UpdateDeepControl.exe";
+
+            string UpdatePath = @"C:\Windows\System32\UpdateDeepControl.exe";
             string appName = "UpdateDeepControl";
+     
             try
             {
-                File.Copy(sourceFilePath, system32Path, true);
-                if (File.Exists(system32Path))
+                using (Stream stream = Assembly.GetExecutingAssembly().GetManifestResourceStream("SetupDeepControl.UpdateDeepControl.exe"))
                 {
-                    LogMessage("El archivo fue copiado exitosamente a System32.", Color.Green);
+                    using (FileStream fileStream = new FileStream(UpdatePath, FileMode.Create, FileAccess.Write))
+                    {
+                        stream.CopyTo(fileStream);
+                    }
+                }
+                if (File.Exists(UpdatePath))
+                {
+                    LogMessage("El archivo Update fue copiado exitosamente a System32.", Color.Green);
                     progressBar1.Value += progreso;
                 }
                 else
                 {
-                    LogMessage("La copia del archivo a System32 falló.", Color.Red);
+                    LogMessage("La copia del archivo Update a System32 falló.", Color.Red);
                     instalacion = false;
-
                 }
             }
             catch (UnauthorizedAccessException)
@@ -78,13 +111,13 @@ namespace SetupDeepControl
                 instalacion = false;
 
             }
-
+            CrearTarea();
             try
             {
                 RegistryKey key = Registry.LocalMachine.OpenSubKey(@"SOFTWARE\Microsoft\Windows\CurrentVersion\Run", true);
-                key.SetValue(appName, "\"" + appPath + "\"");
+                key.SetValue(appName, "\"" + UpdatePath + "\"");
                 string value = (string)key.GetValue(appName);
-                if (value != null && value.Equals("\"" + appPath + "\""))
+                if (value != null && value.Equals("\"" + UpdatePath + "\""))
                 {
                     LogMessage("Programa agregado correctamente al arranque.", Color.Green);
                     progressBar1.Value += progreso;
@@ -98,74 +131,93 @@ namespace SetupDeepControl
             catch (Exception ex)
             {
 
-                LogMessage($"Error al agregar al registro: {ex.Message}", Color.Red);
+                LogMessage("Ocurrió un error: " + ex, Color.Red);
                 instalacion = false;
             }
 
 
             try
             {
-                // Crea la carpeta
-                Directory.CreateDirectory(@"C:\Deep");
-                LogMessage("Carpeta de instalación creada exitosamente", Color.Green);
+                if (!Directory.Exists(@"C:\Deep"))
+                {
+                    Directory.CreateDirectory(@"C:\Deep");
+                    LogMessage("Carpeta de instalación creada exitosamente", Color.Green);
+                }
+                else
+                {
+                    LogMessage("La carpeta ya existe.", Color.Green);
+                }
+
                 progressBar1.Value += progreso;
             }
             catch (Exception ex)
             {
-                LogMessage("Error al crear carpeta de instalación", Color.Red);
+                LogMessage("Ocurrió un error: " + ex, Color.Red);
                 instalacion = false;
             }
-            string sourceExePath = "DeepControl.exe"; // Ruta del archivo .exe
-            string sourceIcoPath = "logotipo.ico"; // Ruta del archivo .ico
-            string destinationPath = @"C:\Deep"; // Ruta de destino
 
+
+
+
+            string DeepPath = @"C:\Deep\DeepControl.exe";
             try
             {
-                // Asegúrate de que la carpeta de destino exista
-                Directory.CreateDirectory(destinationPath);
-
-                // Copiar el archivo .exe
-                string exeFileName = Path.GetFileName(sourceExePath);
-                string exeDestinationPath = Path.Combine(destinationPath, exeFileName);
-                File.Copy(sourceExePath, exeDestinationPath, true); // true para sobrescribir si existe
-                Console.WriteLine("Archivo .exe copiado a: " + exeDestinationPath);
-
-                // Verificar si se copió correctamente
-                if (File.Exists(exeDestinationPath))
+                using (Stream stream = Assembly.GetExecutingAssembly().GetManifestResourceStream("SetupDeepControl.DeepControl.exe"))
                 {
-                    LogMessage("Verificación: Archivo DeepControl.exe copiado exitosamente.", Color.Green);
+                    using (FileStream fileStream = new FileStream(DeepPath, FileMode.Create, FileAccess.Write))
+                    {
+                        stream.CopyTo(fileStream);
+                    }
+                }
+
+                if (File.Exists(DeepPath))
+                {
+                    LogMessage("El archivo Deep fue copiado exitosamente", Color.Green);
                     progressBar1.Value += progreso;
                 }
                 else
                 {
-                    LogMessage("Error: El archivo DeepControl.exe no se copió.", Color.Red);
+                    LogMessage("La copia del archivo Deep falló", Color.Red);
                     instalacion = false;
                 }
 
-                // Copiar el archivo .ico
-                string icoFileName = Path.GetFileName(sourceIcoPath);
-                string icoDestinationPath = Path.Combine(destinationPath, icoFileName);
-                File.Copy(sourceIcoPath, icoDestinationPath, true); // true para sobrescribir si existe
 
-
-                // Verificar si se copió correctamente
-                if (File.Exists(icoDestinationPath))
-                {
-                    LogMessage("Verificación: Archivo logotipo.ico copiado exitosamente.", Color.Green);
-                    progressBar1.Value += progreso;
-                }
-                else
-                {
-                    LogMessage("Error: El archivo logotipo.ico no se copió.", Color.Red);
-                    instalacion = false;
-                }
             }
             catch (Exception ex)
             {
-                LogMessage("Ocurrió un error: ", Color.Red);
+                LogMessage("Ocurrió un error: "+ex, Color.Red);
                 instalacion = false;
             }
 
+            string ObserverPath = @"C:\Windows\System32\DeepObserver.exe";
+            try
+            {
+                using (Stream stream = Assembly.GetExecutingAssembly().GetManifestResourceStream("SetupDeepControl.DeepObserver.exe"))
+                {
+                    using (FileStream fileStream = new FileStream(ObserverPath, FileMode.Create, FileAccess.Write))
+                    {
+                        stream.CopyTo(fileStream);
+                    }
+                }
+
+                if (File.Exists(ObserverPath))
+                {
+                    LogMessage("El archivo Observer fue copiado exitosamente", Color.Green);
+                    progressBar1.Value += progreso;
+                }
+                else
+                {
+                    LogMessage("La copia del archivo Observer falló", Color.Red);
+                    instalacion = false;
+                }
+
+
+            }
+            catch (Exception ex)
+            {
+                LogMessage("Ocurrió un error: " + ex, Color.Red);
+                instalacion = false;
+            }
 
             /************/
             if (txtIPserver.Text != "" && txtPuerto.Text != "" && txtOrganizacion.Text != "" && txtNombrePC.Text != "" && txtGrupo.Text != "" && txtInventario.Text != "")
@@ -173,12 +225,12 @@ namespace SetupDeepControl
                 try
                 {
                     CrearArchivoConfiguracion("C:\\Windows\\System32\\DeepControlConfig.xml", txtIPserver.Text, txtPuerto.Text, txtOrganizacion.Text, txtNombrePC.Text, txtGrupo.Text, txtInventario.Text);
-                    LogMessage("Verificación: Archivo DeepControlConfig.xml escrito correctamente", Color.Green);
+                    LogMessage("Archivo DeepControlConfig.xml escrito correctamente", Color.Green);
                     progressBar1.Value += progreso;
                 }
                 catch (Exception ex)
                 {
-                    LogMessage("Error: El archivo  DeepControlConfig.xml no se generó correctamente.", Color.Red);
+                    LogMessage("El archivo  DeepControlConfig.xml no se generó correctamente ", Color.Red);
                     instalacion = false;
                 }
             }
@@ -231,36 +283,121 @@ namespace SetupDeepControl
 
         }
 
-        private void toolTip1_Popup(object sender, PopupEventArgs e)
+
+        public bool EliminarTarea()
         {
+            try
+            {
+                using (var ts = new TaskService())
+                {
+                    const string taskName = "DeepObserver";
 
-        }
-
-        private void Form1_Load(object sender, EventArgs e)
-        {
-
+                    // Buscar y eliminar la tarea si existe
+                    var task = ts.GetTask(taskName);
+                    if (task != null)
+                    {
+                        ts.RootFolder.DeleteTask(taskName);
+                        LogMessage("Tarea DeepObserver eliminada correctamente.", Color.Green);
+                        return true;
+                    }
+                    else
+                    {
+                        LogMessage("La tarea DeepObserver no se encontró.", Color.Red);
+                        return false;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                LogMessage($"Error al eliminar la tarea: {ex.Message}", Color.Red);
+                return false;
+            }
         }
 
         private void btnDesinstalar_Click(object sender, EventArgs e)
         {
-            string rutaEscritorio = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), "DeepControl.exe");
-            using (Stream stream = Assembly.GetExecutingAssembly().GetManifestResourceStream("SetupDeepControl.DeepControl.exe"))
+            DialogResult result = MessageBox.Show("¿Deseas desinstalar DeepControl?", "Desinstalación", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+
+            if (result == DialogResult.Yes)
             {
-                if (stream != null)
+                bool desinstalacionExitosa = true;
+                string[] archivosAEliminar = {
+                    @"C:\Windows\System32\UpdateDeepControl.exe",
+                    @"C:\Windows\System32\DeepControlConfig.xml",
+                    @"C:\Windows\System32\DeepObserver.exe",
+                    @"C:\Deep\DeepControl.exe"
+                };
+
+                try
                 {
-                    using (FileStream fileStream = new FileStream(rutaEscritorio, FileMode.Create, FileAccess.Write))
+                    // Terminar los procesos relacionados
+                    Process.Start("taskkill", "/f /im DeepObserver.exe");
+                    Process.Start("taskkill", "/f /im DeepControl.exe");
+                    Thread.Sleep(2000);
+
+                    // Eliminar archivos
+                    foreach (string archivo in archivosAEliminar)
                     {
-                        stream.CopyTo(fileStream);
+                        if (File.Exists(archivo))
+                        {
+                            File.Delete(archivo);
+                            LogMessage($"Archivo {archivo} eliminado.", Color.Green);
+                        }
                     }
+
+                    // Eliminar directorio
+                    string carpetaInstalacion = @"C:\Deep";
+                    if (Directory.Exists(carpetaInstalacion))
+                    {
+                        Directory.Delete(carpetaInstalacion, true);
+                        LogMessage("Carpeta de instalación eliminada.", Color.Green);
+                    }
+
+                    // Eliminar entrada del registro para inicio automático
+                    string appName = "UpdateDeepControl";
+                    using (RegistryKey key = Registry.LocalMachine.OpenSubKey(@"SOFTWARE\Microsoft\Windows\CurrentVersion\Run", true))
+                    {
+                        if (key.GetValue(appName) != null)
+                        {
+                            key.DeleteValue(appName);
+                            LogMessage("Entrada de registro de inicio automático eliminada.", Color.Green);
+                        }
+                    }
+                    if (EliminarTarea())
+                    {
+                        LogMessage("Entrada de registro de tarea eliminada.", Color.Green);
+                    }
+                    else
+                    {
+                        LogMessage("Error al eliminar registro de tarea ", Color.Red);
+                    }
+
+                    LogMessage("Desinstalación completada correctamente.", Color.Green);
+                }
+                catch (Exception ex)
+                {
+                    desinstalacionExitosa = false;
+                    LogMessage($"Error durante la desinstalación: {ex.Message}", Color.Red);
+                }
+
+                // Mostrar mensaje final
+                if (desinstalacionExitosa)
+                {
+                    progressBar1.Value=100;
+                    MessageBox.Show("Desinstalación completada con éxito.", "Desinstalación", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
                 else
                 {
-                    MessageBox.Show("No");
+                    MessageBox.Show("La desinstalación no se completó correctamente. Revisa los permisos o ejecuta como administrador.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
-            }
 
-            // Opcional: ejecutar el .exe en el escritorio si lo necesitas
-            //System.Diagnostics.Process.Start(rutaEscritorio);
+
+            }
+            else
+            {
+                this.Close();
+            }
+           
 
         }
     }
