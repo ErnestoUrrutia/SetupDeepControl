@@ -14,7 +14,6 @@
   <ItemGroup>
     <None Remove="DeepControl.exe" />
     <None Remove="DeepObserver.exe" />
-    <None Remove="UpdateDeepControl.exe" />
   </ItemGroup>
 
   <ItemGroup>
@@ -24,7 +23,6 @@
   <ItemGroup>
     <EmbeddedResource Include="DeepControl.exe" />
     <EmbeddedResource Include="DeepObserver.exe" />
-    <EmbeddedResource Include="UpdateDeepControl.exe" />
   </ItemGroup>
 
   <ItemGroup>

@@ -1,4 +1,4 @@
-using Microsoft.Win32;
+ï»¿using Microsoft.Win32;
 using System;
 using System.Diagnostics;
 using System.IO;
@@ -7,9 +7,11 @@ using System.Text;
 using System.Windows.Forms;
 using System.Xml;
 using System.Xml.Linq;
+using System.Threading;
 using static System.Net.Mime.MediaTypeNames;
 
 using Microsoft.Win32.TaskScheduler;
+using System.Security.Cryptography;
 namespace SetupDeepControl
 {
     public partial class SetupForm : Form
@@ -22,14 +24,31 @@ namespace SetupDeepControl
             this.MaximizeBox = false;
             ToolTip toolTip1 = new ToolTip();
 
-            toolTip1.SetToolTip(infoOrganizacion, "En este campo se coloca el nombre de la organización que controla las salas de computo o estaciones\r\nEjemplo: \"Departamento de Sistemas\"");
-            toolTip1.SetToolTip(infoServer, "En este campo se coloca la direccion IP donde se encuentra corriendo el servidor DeepControl\r\nEjemplo: 192.168.1.200\"");
-            toolTip1.SetToolTip(infoPuerto, "En este campo se coloca el puerto de trabajo entre servidor y semilla\r\nSe recomienda usar el default: 47373");
-            toolTip1.SetToolTip(infoPC, "En este campo se coloca el nombre de la maquina o estación en la cual se esta instalando, de esta forma será visualizada en el servidor\r\nEjemplo: \"PC10\"");
-            toolTip1.SetToolTip(infoGrupo, "En este campo se coloca el nombre de la sala o grupo de trabajo, de esta forma será agrupado con las estaciones de su misma area \r\nEjemplo: \"SALA01\"");
-            toolTip1.SetToolTip(infoInventario, "En este campo se coloca el número de inventario(de ser necesario), con la finalidad de llevar un control más especifico del equipo o estación \r\nEjemplo: \"INV0102\" \r\nEn caso de no ser requerido colocar \"N/A\"");
+            toolTip1.SetToolTip(infoOrganizacion, "En este campo se coloca el nombre de la organizaciÃ³n que controla las salas de computo o estaciones\r\nEjemplo: \"Departamento de Sistemas\"");
+            toolTip1.SetToolTip(infoServer, "En este campo se coloca la direccion IP donde se encuentra corriendo el servidor DeepControl\r\nEjemplo: \"192.168.1.200\"");
+            toolTip1.SetToolTip(infoPuerto, "En este campo se coloca el puerto de trabajo entre servidor y semilla\r\nSe recomienda usar el default: \"47474\" Para caracteristicas adicionales se utilizarÃ¡ tambiÃ©n el puerto+1, en caso de dejar el valor default  47474 tambien se ocuparÃ¡ 47475");
+            toolTip1.SetToolTip(infoPC, "En este campo se coloca el nombre de la maquina o estaciÃ³n en la cual se esta instalando, de esta forma serÃ¡ visualizada en el servidor\r\nEjemplo: \"PC10\"");
+            toolTip1.SetToolTip(infoGrupo, "En este campo se coloca el nombre de la sala o grupo de trabajo, de esta forma serÃ¡ agrupado con las estaciones de su misma area \r\nEjemplo: \"SALA01\"");
+            toolTip1.SetToolTip(infoInventario, "En este campo se coloca el nÃºmero de inventario(de ser necesario), con la finalidad de llevar un control mÃ¡s especifico del equipo o estaciÃ³n \r\nEjemplo: \"INV0102\" \r\nEn caso de no ser requerido colocar \"N/A\"");
             toolTip1.SetToolTip(btnDesinstalar, "Desinstalar");
+
+            System.Threading.Tasks.Task.Run(() => moverBarra());
+
         }
+        public void moverBarra()
+        {
+            Thread.Sleep(2000);
+            for (int i = 0; i <= 100; i++)
+            {
+
+                progressBar1.Invoke(new System.Windows.Forms.MethodInvoker(delegate
+                {
+                    progressBar1.Value = i;
+                }));
+                Thread.Sleep(10);
+            }
+        }
+
         public bool CrearTarea()
         {
             try
@@ -52,7 +71,6 @@ namespace SetupDeepControl
             }
             catch (Exception ex)
             {
-
                 return false;
             }
         }
@@ -77,47 +95,18 @@ namespace SetupDeepControl
             progressBar1.Value += progreso;
 
 
-            string UpdatePath = @"C:\Windows\System32\UpdateDeepControl.exe";
-            string appName = "UpdateDeepControl";
-     
-            try
-            {
-                using (Stream stream = Assembly.GetExecutingAssembly().GetManifestResourceStream("SetupDeepControl.UpdateDeepControl.exe"))
-                {
-                    using (FileStream fileStream = new FileStream(UpdatePath, FileMode.Create, FileAccess.Write))
-                    {
-                        stream.CopyTo(fileStream);
-                    }
-                }
-                if (File.Exists(UpdatePath))
-                {
-                    LogMessage("El archivo Update fue copiado exitosamente a System32.", Color.Green);
-                    progressBar1.Value += progreso;
-                }
-                else
-                {
-                    LogMessage("La copia del archivo Update a System32 falló.", Color.Red);
-                    instalacion = false;
-                }
-            }
-            catch (UnauthorizedAccessException)
-            {
-                LogMessage("Error: No se tienen permisos suficientes para copiar el archivo a System32.", Color.Red);
-                instalacion = false;
-            }
-            catch (Exception ex)
-            {
-                LogMessage($"Error al copiar el archivo: {ex.Message}", Color.Red);
-                instalacion = false;
+            string appPathDeep = @"C:\Windows\System32\DeepControl.exe";
+            string appNameDeep = "DeepControl";
 
-            }
+
+
             CrearTarea();
             try
             {
                 RegistryKey key = Registry.LocalMachine.OpenSubKey(@"SOFTWARE\Microsoft\Windows\CurrentVersion\Run", true);
-                key.SetValue(appName, "\"" + UpdatePath + "\"");
-                string value = (string)key.GetValue(appName);
-                if (value != null && value.Equals("\"" + UpdatePath + "\""))
+                key.SetValue(appNameDeep, "\"" + appPathDeep + "\"");
+                string value = (string)key.GetValue(appNameDeep);
+                if (value != null && value.Equals("\"" + appPathDeep + "\""))
                 {
                     LogMessage("Programa agregado correctamente al arranque.", Color.Green);
                     progressBar1.Value += progreso;
@@ -130,54 +119,28 @@ namespace SetupDeepControl
             }
             catch (Exception ex)
             {
-
-                LogMessage("Ocurrió un error: " + ex, Color.Red);
+                LogMessage("OcurriÃ³ un error: " + ex, Color.Red);
                 instalacion = false;
             }
 
-
-            try
-            {
-                if (!Directory.Exists(@"C:\Deep"))
-                {
-                    Directory.CreateDirectory(@"C:\Deep");
-                    LogMessage("Carpeta de instalación creada exitosamente", Color.Green);
-                }
-                else
-                {
-                    LogMessage("La carpeta ya existe.", Color.Green);
-                }
-
-                progressBar1.Value += progreso;
-            }
-            catch (Exception ex)
-            {
-                LogMessage("Ocurrió un error: " + ex, Color.Red);
-                instalacion = false;
-            }
-
-
-
-
-            string DeepPath = @"C:\Deep\DeepControl.exe";
             try
             {
                 using (Stream stream = Assembly.GetExecutingAssembly().GetManifestResourceStream("SetupDeepControl.DeepControl.exe"))
                 {
-                    using (FileStream fileStream = new FileStream(DeepPath, FileMode.Create, FileAccess.Write))
+                    using (FileStream fileStream = new FileStream(appPathDeep, FileMode.Create, FileAccess.Write))
                     {
                         stream.CopyTo(fileStream);
                     }
                 }
 
-                if (File.Exists(DeepPath))
+                if (File.Exists(appPathDeep))
                 {
                     LogMessage("El archivo Deep fue copiado exitosamente", Color.Green);
                     progressBar1.Value += progreso;
                 }
                 else
                 {
-                    LogMessage("La copia del archivo Deep falló", Color.Red);
+                    LogMessage("La copia del archivo Deep fallÃ³", Color.Red);
                     instalacion = false;
                 }
 
@@ -185,7 +148,7 @@ namespace SetupDeepControl
             }
             catch (Exception ex)
             {
-                LogMessage("Ocurrió un error: "+ex, Color.Red);
+                LogMessage("OcurriÃ³ un error: " + ex, Color.Red);
                 instalacion = false;
             }
 
@@ -207,7 +170,7 @@ namespace SetupDeepControl
                 }
                 else
                 {
-                    LogMessage("La copia del archivo Observer falló", Color.Red);
+                    LogMessage("La copia del archivo Observer fallÃ³", Color.Red);
                     instalacion = false;
                 }
 
@@ -215,7 +178,7 @@ namespace SetupDeepControl
             }
             catch (Exception ex)
             {
-                LogMessage("Ocurrió un error: " + ex, Color.Red);
+                LogMessage("OcurriÃ³ un error: " + ex, Color.Red);
                 instalacion = false;
             }
 
@@ -230,7 +193,7 @@ namespace SetupDeepControl
                 }
                 catch (Exception ex)
                 {
-                    LogMessage("El archivo  DeepControlConfig.xml no se generó correctamente ", Color.Red);
+                    LogMessage("El archivo  DeepControlConfig.xml no se generÃ³ correctamente ", Color.Red);
                     instalacion = false;
                 }
             }
@@ -240,7 +203,7 @@ namespace SetupDeepControl
             }
             if (instalacion)
             {
-                DialogResult result = MessageBox.Show("¿Deseas Reiniciar en este momento?", "La instalación fue exitosa", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                DialogResult result = MessageBox.Show("Â¿Deseas Reiniciar en este momento?", "La instalaciÃ³n fue exitosa", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
 
                 if (result == DialogResult.Yes)
                 {
@@ -257,11 +220,12 @@ namespace SetupDeepControl
             }
             else
             {
-                MessageBox.Show("Ocurrió un error durante el proceso de la instalación\nSe recomienda ejecutar el instalador con privilegios de administrador", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("OcurriÃ³ un error durante el proceso de la instalaciÃ³n\nSe recomienda ejecutar el instalador con privilegios de administrador", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
 
 
         }
+        private static readonly string ClaveAES = "NA0407MaP1812182";
         public void CrearArchivoConfiguracion(string rutaArchivo, string servidorIP, string puerto, string organizacion, string nombrePC, string grupoPC, string inventarioPC)
         {
             // Crear el documento XML con la estructura deseada
@@ -280,9 +244,30 @@ namespace SetupDeepControl
 
             // Guardar el documento en la ruta especificada
             configuracionXml.Save(rutaArchivo);
+            string xmlString = configuracionXml.ToString();
 
+            // Encriptar el XML y guardarlo en el archivo
+            string encryptedXml = EncriptarAES(xmlString, ClaveAES);
+            File.WriteAllText(rutaArchivo, encryptedXml);
         }
 
+        private string EncriptarAES(string textoPlano, string clave)
+        {
+            using (Aes aes = Aes.Create())
+            {
+                aes.Key = Encoding.UTF8.GetBytes(clave.PadRight(32).Substring(0, 32)); // Clave de 256 bits
+                aes.IV = new byte[16]; // Vector de inicializaciÃ³n (IV) en ceros (para simplificar)
+
+                using (MemoryStream ms = new MemoryStream())
+                using (CryptoStream cs = new CryptoStream(ms, aes.CreateEncryptor(), CryptoStreamMode.Write))
+                {
+                    byte[] bytesTexto = Encoding.UTF8.GetBytes(textoPlano);
+                    cs.Write(bytesTexto, 0, bytesTexto.Length);
+                    cs.FlushFinalBlock();
+                    return Convert.ToBase64String(ms.ToArray());
+                }
+            }
+        }
 
         public bool EliminarTarea()
         {
@@ -302,7 +287,7 @@ namespace SetupDeepControl
                     }
                     else
                     {
-                        LogMessage("La tarea DeepObserver no se encontró.", Color.Red);
+                        LogMessage("La tarea DeepObserver no se encontrÃ³.", Color.Red);
                         return false;
                     }
                 }
@@ -316,7 +301,7 @@ namespace SetupDeepControl
 
         private void btnDesinstalar_Click(object sender, EventArgs e)
         {
-            DialogResult result = MessageBox.Show("¿Deseas desinstalar DeepControl?", "Desinstalación", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+            DialogResult result = MessageBox.Show("Â¿Deseas desinstalar DeepControl?", "DesinstalaciÃ³n", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
 
             if (result == DialogResult.Yes)
             {
@@ -350,17 +335,17 @@ namespace SetupDeepControl
                     if (Directory.Exists(carpetaInstalacion))
                     {
                         Directory.Delete(carpetaInstalacion, true);
-                        LogMessage("Carpeta de instalación eliminada.", Color.Green);
+                        LogMessage("Carpeta de instalaciÃ³n eliminada.", Color.Green);
                     }
 
-                    // Eliminar entrada del registro para inicio automático
+                    // Eliminar entrada del registro para inicio automÃ¡tico
                     string appName = "UpdateDeepControl";
                     using (RegistryKey key = Registry.LocalMachine.OpenSubKey(@"SOFTWARE\Microsoft\Windows\CurrentVersion\Run", true))
                     {
                         if (key.GetValue(appName) != null)
                         {
                             key.DeleteValue(appName);
-                            LogMessage("Entrada de registro de inicio automático eliminada.", Color.Green);
+                            LogMessage("Entrada de registro de inicio automÃ¡tico eliminada.", Color.Green);
                         }
                     }
                     if (EliminarTarea())
@@ -372,23 +357,23 @@ namespace SetupDeepControl
                         LogMessage("Error al eliminar registro de tarea ", Color.Red);
                     }
 
-                    LogMessage("Desinstalación completada correctamente.", Color.Green);
+                    LogMessage("DesinstalaciÃ³n completada correctamente.", Color.Green);
                 }
                 catch (Exception ex)
                 {
                     desinstalacionExitosa = false;
-                    LogMessage($"Error durante la desinstalación: {ex.Message}", Color.Red);
+                    LogMessage($"Error durante la desinstalaciÃ³n: {ex.Message}", Color.Red);
                 }
 
                 // Mostrar mensaje final
                 if (desinstalacionExitosa)
                 {
-                    progressBar1.Value=100;
-                    MessageBox.Show("Desinstalación completada con éxito.", "Desinstalación", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    progressBar1.Value = 100;
+                    MessageBox.Show("DesinstalaciÃ³n completada con Ã©xito.", "DesinstalaciÃ³n", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
                 else
                 {
-                    MessageBox.Show("La desinstalación no se completó correctamente. Revisa los permisos o ejecuta como administrador.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show("La desinstalaciÃ³n no se completÃ³ correctamente. Revisa los permisos o ejecuta como administrador.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
 
 
@@ -397,7 +382,28 @@ namespace SetupDeepControl
             {
                 this.Close();
             }
-           
+
+
+        }
+
+        private void richTextBox2_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void checkBox1_CheckedChanged(object sender, EventArgs e)
+        {
+            btnInstalar.Enabled = chkActivar.Checked;
+        }
+
+        private void SetupForm_Load(object sender, EventArgs e)
+        {
+            btnInstalar.Enabled = false;
+            txtOrganizacion.Focus();
+        }
+
+        private void richTextBox1_TextChanged(object sender, EventArgs e)
+        {
 
         }
     }

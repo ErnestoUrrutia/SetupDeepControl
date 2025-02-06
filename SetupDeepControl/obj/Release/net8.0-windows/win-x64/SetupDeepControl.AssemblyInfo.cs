@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("Ernesto Urrutia Developer")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Release")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+ded88603a83fef712a6e1941f64e5fc474f30377")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+fb7c51326c77dc20e1d3070e48127e35ffca3b7e")]
 [assembly: System.Reflection.AssemblyProductAttribute("DeepControl")]
 [assembly: System.Reflection.AssemblyTitleAttribute("SetupDeepControl")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
