@@ -32,7 +32,38 @@ namespace SetupDeepControl
             toolTip1.SetToolTip(infoInventario, "En este campo se coloca el número de inventario(de ser necesario), con la finalidad de llevar un control más especifico del equipo o estación \r\nEjemplo: \"INV0102\" \r\nEn caso de no ser requerido colocar \"N/A\"");
             toolTip1.SetToolTip(btnDesinstalar, "Desinstalar");
 
-            System.Threading.Tasks.Task.Run(() => moverBarra());
+          //  System.Threading.Tasks.Task.Run(() => moverBarra());
+
+            string keyName = "Software\\Microsoft\\Windows\\CurrentVersion\\Run";
+            string valueName = "UpdateDeepControl";
+
+            try
+            {
+                // Eliminar en HKEY_CURRENT_USER
+                using (RegistryKey key = Registry.CurrentUser.OpenSubKey(keyName, true))
+                {
+                    if (key != null && key.GetValue(valueName) != null)
+                    {
+                        key.DeleteValue(valueName);
+                        Console.WriteLine("Clave eliminada en HKEY_CURRENT_USER.");
+                    }
+                }
+
+                // Eliminar en HKEY_LOCAL_MACHINE (requiere permisos de administrador)
+                using (RegistryKey key = Registry.LocalMachine.OpenSubKey(keyName, true))
+                {
+                    if (key != null && key.GetValue(valueName) != null)
+                    {
+                        key.DeleteValue(valueName);
+                        Console.WriteLine("Clave eliminada en HKEY_LOCAL_MACHINE.");
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Error: " + ex.Message);
+            }
+
 
         }
         public void moverBarra()
@@ -310,7 +341,7 @@ namespace SetupDeepControl
                     @"C:\Windows\System32\UpdateDeepControl.exe",
                     @"C:\Windows\System32\DeepControlConfig.xml",
                     @"C:\Windows\System32\DeepObserver.exe",
-                    @"C:\Deep\DeepControl.exe"
+                    @"C:\Windows\System32\DeepControl.exe"
                 };
 
                 try
