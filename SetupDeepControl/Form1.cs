@@ -17,6 +17,7 @@ namespace SetupDeepControl
     public partial class SetupForm : Form
     {
         bool instalacion = true;
+        private static readonly string ClaveAES = "NA0407MaP1812182";
         public SetupForm()
         {
             InitializeComponent();
@@ -32,7 +33,7 @@ namespace SetupDeepControl
             toolTip1.SetToolTip(infoInventario, "En este campo se coloca el número de inventario(de ser necesario), con la finalidad de llevar un control más especifico del equipo o estación \r\nEjemplo: \"INV0102\" \r\nEn caso de no ser requerido colocar \"N/A\"");
             toolTip1.SetToolTip(btnDesinstalar, "Desinstalar");
 
-          //  System.Threading.Tasks.Task.Run(() => moverBarra());
+            //System.Threading.Tasks.Task.Run(() => moverBarra(50));
 
             string keyName = "Software\\Microsoft\\Windows\\CurrentVersion\\Run";
             string valueName = "UpdateDeepControl";
@@ -66,17 +67,13 @@ namespace SetupDeepControl
 
 
         }
-        public void moverBarra()
+        public void moverBarra(int incremento)
         {
             Thread.Sleep(2000);
-            for (int i = 0; i <= 100; i++)
+            for (int i = progressBar1.Value; i <= incremento; i++)
             {
-
-                progressBar1.Invoke(new System.Windows.Forms.MethodInvoker(delegate
-                {
-                    progressBar1.Value = i;
-                }));
-                Thread.Sleep(10);
+                 progressBar1.Value += i;
+                 Thread.Sleep(1);
             }
         }
 
@@ -122,16 +119,19 @@ namespace SetupDeepControl
             Process.Start("taskkill", $"/f /im DeepObserver.exe");
             Process.Start("taskkill", $"/f /im DeepControl.exe");
             Thread.Sleep(2000);
-            int progreso = 14;
-            progressBar1.Value += progreso;
+            int progreso = 12;
+            progressBar1.Value = 0;
 
 
             string appPathDeep = @"C:\Windows\System32\DeepControl.exe";
             string appNameDeep = "DeepControl";
 
 
-
+            /*************************************************************************************************************************************/
             CrearTarea();
+            moverBarra(progreso);
+
+            /*************************************************************************************************************************************/
             try
             {
                 RegistryKey key = Registry.LocalMachine.OpenSubKey(@"SOFTWARE\Microsoft\Windows\CurrentVersion\Run", true);
@@ -140,13 +140,14 @@ namespace SetupDeepControl
                 if (value != null && value.Equals("\"" + appPathDeep + "\""))
                 {
                     LogMessage("Programa agregado correctamente al arranque.", Color.Green);
-                    progressBar1.Value += progreso;
+                    moverBarra(progreso);
                 }
                 else
                 {
                     LogMessage("No se pudo agregar el programa al arranque.", Color.Red);
                     instalacion = false;
                 }
+                
             }
             catch (Exception ex)
             {
@@ -154,6 +155,9 @@ namespace SetupDeepControl
                 instalacion = false;
             }
 
+
+
+            /*************************************************************************************************************************************/
             try
             {
                 using (Stream stream = Assembly.GetExecutingAssembly().GetManifestResourceStream("SetupDeepControl.DeepControl.exe"))
@@ -167,7 +171,7 @@ namespace SetupDeepControl
                 if (File.Exists(appPathDeep))
                 {
                     LogMessage("El archivo Deep fue copiado exitosamente", Color.Green);
-                    progressBar1.Value += progreso;
+                    moverBarra(progreso);
                 }
                 else
                 {
@@ -183,6 +187,8 @@ namespace SetupDeepControl
                 instalacion = false;
             }
 
+
+            /*************************************************************************************************************************************/
             string ObserverPath = @"C:\Windows\System32\DeepObserver.exe";
             try
             {
@@ -197,7 +203,7 @@ namespace SetupDeepControl
                 if (File.Exists(ObserverPath))
                 {
                     LogMessage("El archivo Observer fue copiado exitosamente", Color.Green);
-                    progressBar1.Value += progreso;
+                    moverBarra(progreso);
                 }
                 else
                 {
@@ -213,14 +219,14 @@ namespace SetupDeepControl
                 instalacion = false;
             }
 
-            /************/
+            /*************************************************************************************************************************************/
             if (txtIPserver.Text != "" && txtPuerto.Text != "" && txtOrganizacion.Text != "" && txtNombrePC.Text != "" && txtGrupo.Text != "" && txtInventario.Text != "")
             {
                 try
                 {
                     CrearArchivoConfiguracion("C:\\Windows\\System32\\DeepControlConfig.xml", txtIPserver.Text, txtPuerto.Text, txtOrganizacion.Text, txtNombrePC.Text, txtGrupo.Text, txtInventario.Text);
                     LogMessage("Archivo DeepControlConfig.xml escrito correctamente", Color.Green);
-                    progressBar1.Value += progreso;
+                    moverBarra(progreso);
                 }
                 catch (Exception ex)
                 {
@@ -256,7 +262,7 @@ namespace SetupDeepControl
 
 
         }
-        private static readonly string ClaveAES = "NA0407MaP1812182";
+        
         public void CrearArchivoConfiguracion(string rutaArchivo, string servidorIP, string puerto, string organizacion, string nombrePC, string grupoPC, string inventarioPC)
         {
             // Crear el documento XML con la estructura deseada
@@ -338,7 +344,7 @@ namespace SetupDeepControl
             {
                 bool desinstalacionExitosa = true;
                 string[] archivosAEliminar = {
-                    @"C:\Windows\System32\UpdateDeepControl.exe",
+
                     @"C:\Windows\System32\DeepControlConfig.xml",
                     @"C:\Windows\System32\DeepObserver.exe",
                     @"C:\Windows\System32\DeepControl.exe"
@@ -370,7 +376,7 @@ namespace SetupDeepControl
                     }
 
                     // Eliminar entrada del registro para inicio automático
-                    string appName = "UpdateDeepControl";
+                    string appName = "DeepControl";
                     using (RegistryKey key = Registry.LocalMachine.OpenSubKey(@"SOFTWARE\Microsoft\Windows\CurrentVersion\Run", true))
                     {
                         if (key.GetValue(appName) != null)

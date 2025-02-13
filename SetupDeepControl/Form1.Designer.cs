@@ -61,7 +61,7 @@
             // btnInstalar
             // 
             btnInstalar.BackColor = Color.Transparent;
-            btnInstalar.Font = new Font("Arial Rounded MT Bold", 14.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            btnInstalar.Font = new Font("Microsoft Sans Serif", 14.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
             btnInstalar.Location = new Point(572, 373);
             btnInstalar.Name = "btnInstalar";
             btnInstalar.Size = new Size(200, 36);
@@ -73,7 +73,7 @@
             // btnDesinstalar
             // 
             btnDesinstalar.BackgroundImageLayout = ImageLayout.Stretch;
-            btnDesinstalar.Font = new Font("Arial Rounded MT Bold", 14.25F);
+            btnDesinstalar.Font = new Font("Microsoft Sans Serif", 14.25F);
             btnDesinstalar.Location = new Point(329, 373);
             btnDesinstalar.Name = "btnDesinstalar";
             btnDesinstalar.Size = new Size(129, 36);
@@ -85,7 +85,7 @@
             // richTextBox1
             // 
             richTextBox1.BackColor = SystemColors.ButtonFace;
-            richTextBox1.Font = new Font("Arial Narrow", 8.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            richTextBox1.Font = new Font("Microsoft Sans Serif", 8.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
             richTextBox1.Location = new Point(12, 337);
             richTextBox1.Name = "richTextBox1";
             richTextBox1.ReadOnly = true;
@@ -99,11 +99,12 @@
             // 
             txtIPserver.Location = new Point(7, 21);
             txtIPserver.Name = "txtIPserver";
-            txtIPserver.Size = new Size(107, 26);
+            txtIPserver.Size = new Size(107, 27);
             txtIPserver.TabIndex = 1;
             // 
             // txtPuerto
             // 
+            txtPuerto.Font = new Font("Calibri", 11.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
             txtPuerto.Location = new Point(7, 20);
             txtPuerto.Name = "txtPuerto";
             txtPuerto.Size = new Size(42, 26);
@@ -115,28 +116,28 @@
             // 
             txtOrganizacion.Location = new Point(6, 21);
             txtOrganizacion.Name = "txtOrganizacion";
-            txtOrganizacion.Size = new Size(143, 26);
+            txtOrganizacion.Size = new Size(143, 27);
             txtOrganizacion.TabIndex = 0;
             // 
             // txtNombrePC
             // 
             txtNombrePC.Location = new Point(7, 22);
             txtNombrePC.Name = "txtNombrePC";
-            txtNombrePC.Size = new Size(110, 26);
+            txtNombrePC.Size = new Size(110, 27);
             txtNombrePC.TabIndex = 4;
             // 
             // txtGrupo
             // 
             txtGrupo.Location = new Point(7, 22);
             txtGrupo.Name = "txtGrupo";
-            txtGrupo.Size = new Size(108, 26);
+            txtGrupo.Size = new Size(108, 27);
             txtGrupo.TabIndex = 5;
             // 
             // txtInventario
             // 
             txtInventario.Location = new Point(8, 22);
             txtInventario.Name = "txtInventario";
-            txtInventario.Size = new Size(100, 26);
+            txtInventario.Size = new Size(100, 27);
             txtInventario.TabIndex = 6;
             txtInventario.Text = "N/A";
             // 
@@ -234,7 +235,7 @@
             // 
             groupBox1.Controls.Add(txtOrganizacion);
             groupBox1.Controls.Add(infoOrganizacion);
-            groupBox1.Font = new Font("Arial Narrow", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            groupBox1.Font = new Font("Calibri", 12F, FontStyle.Bold);
             groupBox1.Location = new Point(330, 58);
             groupBox1.Name = "groupBox1";
             groupBox1.Size = new Size(196, 55);
@@ -246,7 +247,7 @@
             // 
             groupBox2.Controls.Add(txtIPserver);
             groupBox2.Controls.Add(infoServer);
-            groupBox2.Font = new Font("Arial Narrow", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            groupBox2.Font = new Font("Calibri", 12F, FontStyle.Bold);
             groupBox2.Location = new Point(535, 58);
             groupBox2.Name = "groupBox2";
             groupBox2.Size = new Size(142, 55);
@@ -258,7 +259,7 @@
             // 
             groupBox3.Controls.Add(txtPuerto);
             groupBox3.Controls.Add(infoPuerto);
-            groupBox3.Font = new Font("Arial Narrow", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            groupBox3.Font = new Font("Calibri", 12F, FontStyle.Bold);
             groupBox3.Location = new Point(685, 58);
             groupBox3.Name = "groupBox3";
             groupBox3.Size = new Size(82, 55);
@@ -270,7 +271,7 @@
             // 
             groupBox4.Controls.Add(txtNombrePC);
             groupBox4.Controls.Add(infoPC);
-            groupBox4.Font = new Font("Arial Narrow", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            groupBox4.Font = new Font("Calibri", 12F, FontStyle.Bold);
             groupBox4.Location = new Point(330, 119);
             groupBox4.Name = "groupBox4";
             groupBox4.Size = new Size(149, 55);
@@ -282,7 +283,7 @@
             // 
             groupBox5.Controls.Add(txtGrupo);
             groupBox5.Controls.Add(infoGrupo);
-            groupBox5.Font = new Font("Arial Narrow", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            groupBox5.Font = new Font("Calibri", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
             groupBox5.Location = new Point(485, 119);
             groupBox5.Name = "groupBox5";
             groupBox5.Size = new Size(147, 55);
@@ -294,7 +295,7 @@
             // 
             groupBox6.Controls.Add(txtInventario);
             groupBox6.Controls.Add(infoInventario);
-            groupBox6.Font = new Font("Arial Narrow", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            groupBox6.Font = new Font("Calibri", 12F, FontStyle.Bold);
             groupBox6.Location = new Point(638, 119);
             groupBox6.Name = "groupBox6";
             groupBox6.Size = new Size(129, 55);
@@ -304,7 +305,7 @@
             // 
             // label1
             // 
-            label1.Font = new Font("Arial Narrow", 20.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            label1.Font = new Font("Microsoft Sans Serif", 20.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
             label1.Location = new Point(337, 9);
             label1.Name = "label1";
             label1.Size = new Size(435, 44);
