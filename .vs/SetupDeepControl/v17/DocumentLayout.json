@@ -39,15 +39,15 @@
             {
               "$type": "Document",
               "DocumentIndex": 1,
-              "Title": "Form1.cs [Dise\u00F1o]",
+              "Title": "Form1.cs [Design]",
               "DocumentMoniker": "C:\\SetupDeepControl\\SetupDeepControl\\Form1.cs",
               "RelativeDocumentMoniker": "SetupDeepControl\\Form1.cs",
-              "ToolTip": "C:\\SetupDeepControl\\SetupDeepControl\\Form1.cs [Dise\u00F1o]",
-              "RelativeToolTip": "SetupDeepControl\\Form1.cs [Dise\u00F1o]",
+              "ToolTip": "C:\\SetupDeepControl\\SetupDeepControl\\Form1.cs [Design]",
+              "RelativeToolTip": "SetupDeepControl\\Form1.cs [Design]",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-09-19T06:41:02.99Z",
               "IsPinned": true,
-              "EditorCaption": " [Dise\u00F1o]"
+              "EditorCaption": " [Design]"
             },
             {
               "$type": "Document",
@@ -57,7 +57,7 @@
               "RelativeDocumentMoniker": "SetupDeepControl\\Form1.cs",
               "ToolTip": "C:\\SetupDeepControl\\SetupDeepControl\\Form1.cs",
               "RelativeToolTip": "SetupDeepControl\\Form1.cs",
-              "ViewState": "AgIAAFwBAAAAAAAAAAAAwHoBAAAmAAAAAAAAAA==",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-09-19T06:45:06.577Z",
               "EditorCaption": ""
@@ -107,8 +107,7 @@
               "RelativeToolTip": "SetupDeepControl\\Form1.Designer.cs",
               "ViewState": "AQIAAHQBAAAAAAAAAAAAAG4BAAAlAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-09-22T05:12:15.12Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-09-22T05:12:15.12Z"
             }
           ]
         }
