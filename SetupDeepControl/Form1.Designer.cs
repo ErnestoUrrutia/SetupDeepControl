@@ -116,7 +116,7 @@
             // 
             txtOrganizacion.Location = new Point(6, 21);
             txtOrganizacion.Name = "txtOrganizacion";
-            txtOrganizacion.Size = new Size(143, 27);
+            txtOrganizacion.Size = new Size(169, 27);
             txtOrganizacion.TabIndex = 0;
             // 
             // txtNombrePC
@@ -175,7 +175,7 @@
             infoOrganizacion.AutoSize = true;
             infoOrganizacion.BackColor = SystemColors.Control;
             infoOrganizacion.Font = new Font("Arial Black", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            infoOrganizacion.Location = new Point(155, 22);
+            infoOrganizacion.Location = new Point(181, 22);
             infoOrganizacion.Name = "infoOrganizacion";
             infoOrganizacion.Size = new Size(20, 23);
             infoOrganizacion.TabIndex = 25;
@@ -185,7 +185,7 @@
             // 
             infoServer.AutoSize = true;
             infoServer.Font = new Font("Arial Black", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            infoServer.Location = new Point(120, 22);
+            infoServer.Location = new Point(111, 22);
             infoServer.Name = "infoServer";
             infoServer.Size = new Size(20, 23);
             infoServer.TabIndex = 26;
@@ -238,7 +238,7 @@
             groupBox1.Font = new Font("Calibri", 12F, FontStyle.Bold);
             groupBox1.Location = new Point(330, 58);
             groupBox1.Name = "groupBox1";
-            groupBox1.Size = new Size(196, 55);
+            groupBox1.Size = new Size(208, 55);
             groupBox1.TabIndex = 31;
             groupBox1.TabStop = false;
             groupBox1.Text = "Nombre de la organización";
@@ -248,9 +248,9 @@
             groupBox2.Controls.Add(txtIPserver);
             groupBox2.Controls.Add(infoServer);
             groupBox2.Font = new Font("Calibri", 12F, FontStyle.Bold);
-            groupBox2.Location = new Point(535, 58);
+            groupBox2.Location = new Point(544, 58);
             groupBox2.Name = "groupBox2";
-            groupBox2.Size = new Size(142, 55);
+            groupBox2.Size = new Size(133, 55);
             groupBox2.TabIndex = 32;
             groupBox2.TabStop = false;
             groupBox2.Text = "IP del servidor";
