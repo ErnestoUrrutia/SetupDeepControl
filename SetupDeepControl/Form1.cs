@@ -67,15 +67,7 @@ namespace SetupDeepControl
 
 
         }
-        public void moverBarra(int incremento)
-        {
-            Thread.Sleep(2000);
-            for (int i = progressBar1.Value; i <= incremento; i++)
-            {
-                 progressBar1.Value += i;
-                 Thread.Sleep(1);
-            }
-        }
+
 
         public bool CrearTarea()
         {
@@ -129,7 +121,7 @@ namespace SetupDeepControl
 
             /*************************************************************************************************************************************/
             CrearTarea();
-            moverBarra(progreso);
+            progressBar1.Value = 10;
 
             /*************************************************************************************************************************************/
             try
@@ -140,7 +132,7 @@ namespace SetupDeepControl
                 if (value != null && value.Equals("\"" + appPathDeep + "\""))
                 {
                     LogMessage("Programa agregado correctamente al arranque.", Color.Green);
-                    moverBarra(progreso);
+                    progressBar1.Value = 20;
                 }
                 else
                 {
@@ -171,7 +163,7 @@ namespace SetupDeepControl
                 if (File.Exists(appPathDeep))
                 {
                     LogMessage("El archivo Deep fue copiado exitosamente", Color.Green);
-                    moverBarra(progreso);
+                    progressBar1.Value = 30;
                 }
                 else
                 {
@@ -203,7 +195,7 @@ namespace SetupDeepControl
                 if (File.Exists(ObserverPath))
                 {
                     LogMessage("El archivo Observer fue copiado exitosamente", Color.Green);
-                    moverBarra(progreso);
+                    progressBar1.Value = 40;
                 }
                 else
                 {
@@ -226,7 +218,7 @@ namespace SetupDeepControl
                 {
                     CrearArchivoConfiguracion("C:\\Windows\\System32\\DeepControlConfig.xml", txtIPserver.Text, txtPuerto.Text, txtOrganizacion.Text, txtNombrePC.Text, txtGrupo.Text, txtInventario.Text);
                     LogMessage("Archivo DeepControlConfig.xml escrito correctamente", Color.Green);
-                    moverBarra(progreso);
+                    progressBar1.Value = 50;
                 }
                 catch (Exception ex)
                 {
@@ -240,6 +232,7 @@ namespace SetupDeepControl
             }
             if (instalacion)
             {
+                progressBar1.Value = 100;
                 DialogResult result = MessageBox.Show("¿Deseas Reiniciar en este momento?", "La instalación fue exitosa", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
 
                 if (result == DialogResult.Yes)
