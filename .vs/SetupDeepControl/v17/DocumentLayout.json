@@ -7,7 +7,7 @@
       "RelativeMoniker": "D:0:0:{0C6BD3E0-4CAE-490B-ABC1-5F4B5A7F7BB9}|SetupDeepControl\\SetupDeepControl.csproj|solutionrelative:setupdeepcontrol\\form1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{0C6BD3E0-4CAE-490B-ABC1-5F4B5A7F7BB9}|SetupDeepControl\\SetupDeepControl.csproj|c:\\setupdeepcontrol\\setupdeepcontrol\\form1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
+      "AbsoluteMoniker": "D:0:0:{0C6BD3E0-4CAE-490B-ABC1-5F4B5A7F7BB9}|SetupDeepControl\\SetupDeepControl.csproj|C:\\SetupDeepControl\\setupdeepcontrol\\form1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
       "RelativeMoniker": "D:0:0:{0C6BD3E0-4CAE-490B-ABC1-5F4B5A7F7BB9}|SetupDeepControl\\SetupDeepControl.csproj|solutionrelative:setupdeepcontrol\\form1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form"
     },
     {
@@ -39,15 +39,15 @@
             {
               "$type": "Document",
               "DocumentIndex": 1,
-              "Title": "Form1.cs [Dise\u00F1o]",
+              "Title": "Form1.cs [Design]",
               "DocumentMoniker": "C:\\SetupDeepControl\\SetupDeepControl\\Form1.cs",
               "RelativeDocumentMoniker": "SetupDeepControl\\Form1.cs",
-              "ToolTip": "C:\\SetupDeepControl\\SetupDeepControl\\Form1.cs [Dise\u00F1o]",
-              "RelativeToolTip": "SetupDeepControl\\Form1.cs [Dise\u00F1o]",
+              "ToolTip": "C:\\SetupDeepControl\\SetupDeepControl\\Form1.cs [Design]",
+              "RelativeToolTip": "SetupDeepControl\\Form1.cs [Design]",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-09-19T06:41:02.99Z",
               "IsPinned": true,
-              "EditorCaption": " [Dise\u00F1o]"
+              "EditorCaption": " [Design]"
             },
             {
               "$type": "Document",
@@ -57,7 +57,7 @@
               "RelativeDocumentMoniker": "SetupDeepControl\\Form1.cs",
               "ToolTip": "C:\\SetupDeepControl\\SetupDeepControl\\Form1.cs",
               "RelativeToolTip": "SetupDeepControl\\Form1.cs",
-              "ViewState": "AQIAABcAAAAAAAAAAAAUwHoAAAAWAAAA",
+              "ViewState": "AgIAABcAAAAAAAAAAAAUwHoAAAAWAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-09-19T06:45:06.577Z",
               "EditorCaption": ""
