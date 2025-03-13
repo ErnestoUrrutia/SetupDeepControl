@@ -369,7 +369,7 @@
             Controls.Add(btnInstalar);
             Icon = (Icon)resources.GetObject("$this.Icon");
             Name = "SetupForm";
-            Text = "Instalador Semilla DeepControl";
+            Text = "Instalador Semilla DeepControl v2.0.4";
             Load += SetupForm_Load;
             panel1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)pictureBox1).EndInit();
